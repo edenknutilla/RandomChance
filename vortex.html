@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+</head>
+<body>
+  <svg id="svg" height="1000" width="1000"></svg>
+</body>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+
+<script>
+  var svg = d3.select(document.getElementById('svg'))
+  svg.append('line')
+     .attr("x1", 5)
+     .attr("y1", 5)
+     .attr("x2", 5)
+     .attr("y2", 5)
+     .attr("stroke-width", 2)
+     .attr("stroke", "black")
+     .transition()
+     .duration(1500)
+     .attr("x2", 210)
+     .attr("y2", 200)
+
+  var angleRange = 300;
+  var x1 = 5;
+  var y1 = 5; 
+  var x2 = x1;
+  var y2 = y1;
+              
+  for (var i=0; i<100; i++) {
+
+    var line = svg.append("line")
+        .attr("x1", x1)
+        .attr("y1", y1)
+        .attr("x2", x2)
+        .attr("y2", y2)
+        .attr("stroke-width", 2)
+        .attr("stroke", function() {
+              return "hsl(" + Math.random() * 360 + ",100%,50%)";
+                          });
+    x2 = Math.floor((Math.random() * angleRange) + 1);
+    y2 = Math.floor((Math.random() * angleRange) + 1);
+        line.transition()
+        .duration(1500)
+        .attr("x2", 210)
+        .attr("y2", 200);
+    x1 = x2;
+    y1 = y2;
+    angleRange = angleRange - (angleRange*0.05);
+
+  }
+
+</script>
+</html>
