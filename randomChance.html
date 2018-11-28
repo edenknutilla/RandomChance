@@ -8,82 +8,80 @@
       justify-content: center;
       align-content: center;
       padding-top: 50px;
-
     }
  
   </style>
 </head>
 <body>
-<!--   <svg id="svg" height="1000" width="1000"></svg> -->
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 
 <script>
 
- function generateRandomArt() {
-  // array of curve functions and tites
+function generateRandomArt() {
+
+  // Array of curve functions and tites
   var curveArray = [
-      {"d3Curve":d3.curveLinear,"curveTitle":"curveLinear"},
-      {"d3Curve":d3.curveStep,"curveTitle":"curveStep"},
-      {"d3Curve":d3.curveStepBefore,"curveTitle":"curveStepBefore"},
-      {"d3Curve":d3.curveStepAfter,"curveTitle":"curveStepAfter"},
-      {"d3Curve":d3.curveBasis,"curveTitle":"curveBasis"},
-      {"d3Curve":d3.curveCardinal,"curveTitle":"curveCardinal"},
-      {"d3Curve":d3.curveMonotoneX,"curveTitle":"curveMonotoneX"},
-      {"d3Curve":d3.curveCatmullRom,"curveTitle":"curveCatmullRom"}
-    ];
-   var svgContainer = d3.select("body").append("svg")
-                                      .attr("width", 800)
-                                      .attr("height", 800);
-   //by  creating a variable range in number of lines, the piece will be more/less busy
-   var randomRepeatRange = Math.floor((Math.random() * 10) + 1);
-   for (var j=0; j<randomRepeatRange; j++) {
+                    {"d3Curve":d3.curveLinear,"curveTitle":"curveLinear"},
+                    {"d3Curve":d3.curveStep,"curveTitle":"curveStep"},
+                    {"d3Curve":d3.curveStepBefore,"curveTitle":"curveStepBefore"},
+                    {"d3Curve":d3.curveStepAfter,"curveTitle":"curveStepAfter"},
+                    {"d3Curve":d3.curveBasis,"curveTitle":"curveBasis"},
+                    {"d3Curve":d3.curveCardinal,"curveTitle":"curveCardinal"},
+                    {"d3Curve":d3.curveMonotoneX,"curveTitle":"curveMonotoneX"},
+                    {"d3Curve":d3.curveCatmullRom,"curveTitle":"curveCatmullRom"}
+                  ];
+  //by randomizing the number of paths, we can vary the number of visual players on the board 
+  var randomNumberofPaths = Math.floor((Math.random() * 10) + 1);
+
+  var svgContainer = d3.select("body").append("svg")
+                        .attr("width", 800)
+                        .attr("height", 800);
+  for (var j=0; j<randomNumberofPaths; j++) {
     var lineData = [];
+    //angle range is static for aesthetic purposes
     var angleRange = 700;
-    //by  creating a variable range in data, some lines will go slow and others will go fast as they all will draw in the set duration of time
+
+    //by  creating a variable range in data, the lines will vary in length and speed
     var randomDateRange = Math.floor((Math.random() * 30) + 1);
     for (var i=0; i<randomDateRange; i++) {
       x = Math.floor((Math.random() * angleRange) + 1);
       y = Math.floor((Math.random() * angleRange) + 1);
       lineData[i] = { "x": x,   "y": y};
-
-//      angleRange = angleRange - (angleRange*0.05);
-
     }
-     var randomCurve = curveArray[Math.floor(Math.random()*curveArray.length)].d3Curve;
-     var lineFunction = d3.line()
-                              .x(function(d) { return d.x; })
-                              .y(function(d) { return d.y; })
-                              .curve(randomCurve);
-//                              .curve(d3.curveLinear);
 
-   
+    var randomCurve = curveArray[Math.floor(Math.random()*curveArray.length)].d3Curve;
+    var lineFunction = d3.line()
+                          .x(function(d) { return d.x; })
+                          .y(function(d) { return d.y; })
+                          .curve(randomCurve);
+
+
     var path = svgContainer.append("path")
-                                .attr("d", lineFunction(lineData))
-                                .attr("stroke", function() {
-                                      return "hsl(" + Math.random() * 360 + ",100%,50%)";
-                                      })
-                                .attr("stroke-width", 2)
-                                .attr("fill", "none");
+                            .attr("d", lineFunction(lineData))
+                            .attr("stroke", function() {
+                                              return "hsl(" + Math.random() * 360 + ",100%,50%)";
+                                            })
+                            .attr("stroke-width", 2)
+                            .attr("fill", "none");
 
     var randomDurationRange = Math.floor((Math.random() * 10000) + 1000);
-                            
     var totalLength = path.node().getTotalLength();
-        path.attr("stroke-dasharray", totalLength + " " + totalLength)
+      
+      path.attr("stroke-dasharray", totalLength + " " + totalLength)
           .attr("stroke-dashoffset", totalLength)
           .transition()
-            .duration(randomDurationRange)
-            .ease(d3.easeLinear)
-            .attr("stroke-dashoffset", 0);
-   }
- }
+          .duration(randomDurationRange)
+          .ease(d3.easeLinear)
+          .attr("stroke-dashoffset", 0);
+  }
+}
 
 generateRandomArt();
 document.body.addEventListener('click', function(){
-    d3.select("svg").remove(); 
-    generateRandomArt();
-  }
-);
+        d3.select("svg").remove(); 
+        generateRandomArt();
+      });
 
 </script>
 </html>
